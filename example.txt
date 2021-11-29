@@ -1,0 +1,83 @@
+
+# variable public_key_path {
+#   default = "~/.ssh/gcp-demo.pub"
+# }
+# variable image_name {
+#   default = "vmseries-flex-bundle1-1010"
+# }
+# variable machine_type {
+#   default = "n1-standard-4"
+# }
+# variable name {
+#   default = "vmseries01"
+# }
+# variable zone {
+#   default = "us-east1-b"
+# }
+# variable bootstrap_bucket {
+#   default = ""
+# }
+
+# variable mgmt_subnet {
+#   default = "mgmt-subnet-us-east1"
+# }
+
+# variable untrust_subnet {
+#   default = "untrust-subnet-us-east1"
+# }
+# variable trust_subnet {
+#   default = "trust-subnet-us-east1"
+# }
+
+# variable project {
+#   default = "host-4502127"
+# }
+
+
+# module "vmseries" {
+#   source = "./modules/vmseries/"
+#   ssh_key               = var.public_key_path
+#   image_name            = var.image_name
+#   machine_type          = var.machine_type
+#   project               = var.project
+#   create_instance_group = true
+
+#   instances = {
+
+#     vmseries01 = {
+#       name             = var.name
+#       zone             = var.zone
+#       bootstrap_bucket = var.bootstrap_bucket
+#       network_interfaces = [
+#         {
+#           subnetwork = var.untrust_subnet
+#           public_nat = true
+#         },
+#         {
+#           subnetwork = var.mgmt_subnet
+#           public_nat = true
+#         },
+#         {
+#           subnetwork = var.trust_subnet
+#           public_nat = false
+#         }
+#       ]
+#     }
+#   }
+# }
+
+
+
+# resource "random_integer" "example" {
+#   count = module.this.enabled ? 1 : 0
+
+#   min = 1
+#   max = 50000
+#   keepers = {
+#     example = var.example
+#   }
+# }
+
+# locals {
+#   example = format("%v %v", var.example, join("", random_integer.example[*].result))
+# }
